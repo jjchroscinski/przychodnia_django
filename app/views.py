@@ -2,7 +2,6 @@ from rest_framework import viewsets, filters
 from .serializers import *
 from rest_framework.permissions import IsAdminUser, IsAuthenticated , AllowAny
 
-
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -20,8 +19,6 @@ class SekretarkaViewSet(viewsets.ModelViewSet):
     queryset = Sekretarka.objects.all()
     serializer_class = SekretarkaSerializer
     permission_classes = [IsAuthenticated]
-
-
 
 class LekarzViewSet(viewsets.ModelViewSet):
     queryset = Lekarz.objects.all()

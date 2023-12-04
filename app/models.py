@@ -1,15 +1,8 @@
-from datetime import datetime
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator
 import uuid
-
-def spr_data(value):
-    if value.date() > datetime.date(datetime.today()):
-        return value
-    else:
-        raise ValidationError("Data wizyty nie moze byc starsza od daty utworzenia")
+from .validators import spr_data, spr_tel, spr_mail
 
 class Sekretarka(models.Model):
     id = models.UUIDField(
@@ -21,7 +14,9 @@ class Sekretarka(models.Model):
         on_delete=models.CASCADE)
     telefon=models.CharField(
         max_length=14,
-        validators=[MinLengthValidator(9)],
+        validators=[
+            MinLengthValidator(9),
+            spr_tel],
         null=False)
     def __str__(self):
         return f'{self.user.last_name} {self.user.first_name}'
@@ -54,7 +49,9 @@ class Lekarz(models.Model):
         on_delete=models.DO_NOTHING)
     telefon = models.CharField(
         max_length=14,
-        validators=[MinLengthValidator(9)],
+        validators=[
+            MinLengthValidator(9),
+            spr_tel],
         null=False)
     def __str__(self):
         return f'{self.user.last_name} {self.user.first_name}'
@@ -80,7 +77,9 @@ class Pielegniarka(models.Model):
         max_length=15)
     telefon = models.CharField(
         max_length=14,
-        validators=[MinLengthValidator(9)],
+        validators=[
+            MinLengthValidator(9),
+            spr_tel],
         null=False)
     def __str__(self):
         return f'{self.user.last_name} {self.user.first_name}'
@@ -106,6 +105,9 @@ class Pacjet(models.Model):
     pesel = models.CharField(
         unique=True,
         max_length=11,
+        validators=[
+            MinLengthValidator(11),
+            spr_tel],
         null=False)
     imie =  models.CharField(
         max_length=30,
@@ -115,10 +117,13 @@ class Pacjet(models.Model):
         null=False)
     telefon = models.CharField(
         max_length=14,
-        validators=[MinLengthValidator(9)],
+        validators=[
+            MinLengthValidator(9),
+            spr_tel],
         null=False)
     email = models.CharField(
         null=True,
+        validators=[spr_mail],
         max_length=30)
     def __str__(self):
         return f'{self.nazwisko} {self.imie}'
@@ -183,6 +188,7 @@ class NotatkaWizyty(models.Model):
 class Lek(models.Model):
     nazwa = models.CharField(
         max_length=100,
+        unique=True,
         null=False)
 
     def __str__(self):
