@@ -6,12 +6,12 @@ from django.contrib.auth.models import User, Group
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields =['username', 'first_name', 'last_name', 'email']
+        fields =['url','username', 'first_name', 'last_name', 'email']
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
-        fields =['name']
+        fields =['url', 'name']
 
 class SekretarkaSerializer(serializers.HyperlinkedModelSerializer):
     user=UserSerializer()
@@ -23,7 +23,7 @@ class SekretarkaSerializer(serializers.HyperlinkedModelSerializer):
 class SpecjalizacjeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Specjalizacje
-        fields = ['nazwa']
+        fields = '__all__'
 
 class LekarzSerializer(serializers.HyperlinkedModelSerializer):
     imie=serializers.CharField(source='user.first_name')
